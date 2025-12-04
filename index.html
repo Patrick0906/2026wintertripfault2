@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>神訪う冬の旅路</title>
+  <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#F7F5F0">
+<link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/1839/1839331.png">
+
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js');
+    });
+  }
+</script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;600&family=Shippori+Mincho:wght@400;600&family=Zen+Old+Mincho:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+      body {
+        font-family: 'Shippori Mincho', 'Noto Serif JP', serif;
+        background-color: #F7F5F0; /* Washi Beige */
+        color: #3E3E3E; /* Sumi Gray */
+        -webkit-font-smoothing: antialiased;
+      }
+      .font-sans-jp {
+        font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+      }
+      /* Hide scrollbar */
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      
+      /* Animation */
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      .animate-fade-in {
+        animation: fadeIn 0.5s ease-out forwards;
+      }
+      .vertical-rl {
+        writing-mode: vertical-rl;
+      }
+    </style>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              washi: '#F7F5F0',
+              sumi: '#3E3E3E',
+              'sumi-light': '#666666',
+              'accent-red': '#B94047', 
+              'accent-blue': '#7F93A3', 
+              'accent-gold': '#C8B080',
+            },
+            fontFamily: {
+              serif: ['"Zen Old Mincho"', '"Shippori Mincho"', 'serif'],
+              sans: ['"Hiragino Kaku Gothic ProN"', 'sans-serif'],
+            }
+          }
+        }
+      }
+    </script>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://aistudiocdn.com/react@^19.2.1",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.1/",
+    "react/": "https://aistudiocdn.com/react@^19.2.1/",
+    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.555.0"
+  }
+}
+</script>
+</head>
+<body class="min-h-screen relative overflow-x-hidden">
+
+    <!-- Background Decor -->
+    <div class="fixed top-0 left-0 w-full h-full pointer-events-none z-0 overflow-hidden">
+        <!-- Snowflakes -->
+        <div class="absolute -top-10 -right-10 transform rotate-12 opacity-[0.03] text-sumi">
+            <svg width="300" height="300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M2 12h20"/><path d="M12 2v20"/><path d="m20 20-8-8 8-8"/><path d="m4 4 8 8-8 8"/></svg>
+        </div>
+        <div class="absolute top-1/3 -left-20 transform -rotate-12 opacity-[0.02] text-accent-blue">
+            <svg width="200" height="200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M2 12h20"/><path d="M12 2v20"/><path d="m20 20-8-8 8-8"/><path d="m4 4 8 8-8 8"/></svg>
+        </div>
+        <!-- Clouds -->
+        <div class="absolute bottom-[-5%] -left-[5%] opacity-[0.05] text-accent-gold w-[120%] h-80 transform -rotate-2">
+            <svg viewBox="0 0 600 200" fill="currentColor" class="w-full h-full">
+                <path d="M50,100 C80,80 120,90 140,110 C160,80 220,70 260,100 C300,70 380,70 420,100 C460,70 520,80 540,110 C560,140 520,160 490,150 C460,170 400,160 380,140 C350,170 280,160 250,140 C220,170 150,160 130,140 C100,160 40,140 30,110 Z" />
+                <rect x="0" y="120" width="80" height="4" rx="2" opacity="0.6"/>
+                <rect x="520" y="130" width="80" height="4" rx="2" opacity="0.6"/>
+                <circle cx="200" cy="180" r="40" fill="none" stroke="currentColor" strokeWidth="1" opacity="0.3" />
+            </svg>
+        </div>
+        <!-- Kasumi -->
+        <div class="absolute top-[15%] left-0 opacity-[0.04] text-sumi w-full max-w-md h-32">
+             <svg viewBox="0 0 200 60" fill="currentColor" class="w-full h-full">
+                <rect x="-10" y="10" width="100" height="3" rx="1.5" />
+                <rect x="40" y="20" width="120" height="3" rx="1.5" />
+                <rect x="10" y="30" width="80" height="3" rx="1.5" />
+                <rect x="130" y="15" width="50" height="3" rx="1.5" />
+             </svg>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="pt-10 pb-2 px-6 text-center z-10 relative">
+        <p class="text-[10px] tracking-[0.15em] text-sumi-light uppercase mb-1">2026 Winter Trip</p>
+        <h1 class="text-3xl md:text-4xl font-serif font-medium tracking-[0.15em] mb-2 text-sumi leading-relaxed ml-1">
+          神訪う冬の旅路
+        </h1>
+        <div class="w-6 h-[1px] bg-accent-red mx-auto mt-1 mb-2 opacity-60"></div>
+        <p class="text-[10px] font-serif text-sumi-light tracking-widest opacity-80">冬凪の日本縦断プロジェクト</p>
+    </header>
+
+    <!-- Navigation -->
+    <div class="sticky top-0 z-50 bg-washi/95 backdrop-blur-md border-b border-stone-200/50 py-3 shadow-sm">
+        <div id="nav-container" class="flex overflow-x-auto no-scrollbar px-6 gap-2 snap-x pb-1 items-center">
+            <!-- Nav items injected by JS -->
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main id="main-content" class="relative z-10 pt-4 min-h-[calc(100vh-180px)] px-5 pb-32 max-w-lg mx-auto">
+        <!-- Content injected by JS -->
+    </main>
+
+    <!-- Floating Action Button -->
+    <div class="fixed bottom-6 right-5 z-40">
+        <button id="fab-map" class="bg-accent-red text-white p-3.5 rounded-full shadow-xl hover:bg-red-800 transition-transform hover:scale-105 flex items-center justify-center ring-4 ring-washi/50">
+            <!-- Map Icon -->
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.106 5.553a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277a2 2 0 0 1-1.788 0l-4.212-2.106a2 2 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 2 19.381V6.618a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0z"/><path d="M15 5.764v15"/><path d="M9 3.236v15"/></svg>
+        </button>
+    </div>
+
+    <!-- SCRIPT START -->
+    <script>
+    // --- ICONS (SVG Strings) ---
+    const Icons = {
+        Utensils: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg>`,
+        Plane: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h20"/><path d="M12 2v20"/><path d="m20 20-8-8 8-8"/><path d="m4 4 8 8-8 8"/></svg>`, 
+        Train: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="16" x="4" y="3" rx="2"/><path d="M4 11h16"/><path d="M12 3v8"/><path d="m8 19-2 3"/><path d="m18 22-2-3"/><path d="M8 15h0"/><path d="M16 15h0"/></svg>`,
+        Bus: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6v6"/><path d="M15 6v6"/><path d="M2 12h19.6"/><path d="M18 18h3s.5-1.7.8-2.8c.1-.4.2-.8.2-1.2 0-.4-.1-.8-.2-1.2l-1.4-5C20.1 6.8 19.1 6 18 6H4a2 2 0 0 0-2 2v10h3"/><circle cx="7" cy="18" r="2"/><path d="M9 18h5"/><circle cx="16" cy="18" r="2"/></svg>`,
+        Bed: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/></svg>`,
+        Info: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>`,
+        InfoLarge: `<svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>`,
+        ArrowRight: `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>`,
+        Sparkles: `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L12 21l-5.813-1.912a2 2 0 0 1-1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M9 3v4"/><path d="M3 9h4"/><path d="M3 5h4"/></svg>`,
+        MapPin: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>`,
+        Ticket: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 17v2"/><path d="M13 11v2"/></svg>`,
+        ShoppingBag: `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>`,
+        BookOpen: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>`,
+        MessageCircle: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 21 1.9-5.7a8.5 8.5 0 1 1 3.8 3.8z"/></svg>`,
+        MessageCircleLarge: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 21 1.9-5.7a8.5 8.5 0 1 1 3.8 3.8z"/></svg>`,
+        Snowflake: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h20"/><path d="M12 2v20"/><path d="m20 20-8-8 8-8"/><path d="m4 4 8 8-8 8"/></svg>`,
+        RefreshCw: `<svg class="w-5 h-5 animate-spin text-stone-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M3 21v-5h5"/></svg>`,
+        Sun: `<svg class="w-5 h-5 text-orange-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>`,
+        Cloud: `<svg class="w-5 h-5 text-stone-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19c0-1.7-1.3-3-3-3h-11a4 4 0 0 1-1-7.9 5.3 5.3 0 0 1 9.8-1.5L13 7a8 8 0 0 1 11 6.1c0 3.2-2.5 5.9-6.5 5.9Z"/></svg>`,
+        CloudRain: `<svg class="w-5 h-5 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M16 14v6"/><path d="M8 14v6"/><path d="M12 16v6"/></svg>`,
+        CloudSnow: `<svg class="w-5 h-5 text-cyan-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M8 15h.01"/><path d="M8 19h.01"/><path d="M12 17h.01"/><path d="M12 21h.01"/><path d="M16 15h.01"/><path d="M16 19h.01"/></svg>`,
+        CloudLightning: `<svg class="w-5 h-5 text-yellow-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 16.326A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 .5 8.973"/><path d="m13 12-3 5h4l-3 5"/></svg>`
+    };
+
+    function getIcon(name, extraClass = "") {
+        let svg = Icons[name] || Icons.Info;
+        if (extraClass) {
+            svg = svg.replace('<svg ', `<svg class="${extraClass}" `);
+        }
+        return svg;
+    }
+
+    // --- DATA ---
+    const TRIP_DATA = [
+      { date: "2026年2月2日", dayLabel: "2/2(月)", route: "台北 東京", morning: "早餐：桃園機場貴賓室\n東方宇逸貴賓室\n行程：\nBR154 TPE 10:00 - ICN 13:30", afternoon: "午餐：仁川機場貴賓室 (T2)\nMatina Lounge (Terminal 2, Gate 252)\nSky Hub Lounge (Terminal 2, Gate 268)\nLounge L (Terminal 2, Gate 231)\nSPC Lounge (Terminal 2, Gate 268)\n行程：\nOZ381 ICN 15:35 - NRT 17:55", evening: "晚餐：機上\n行程：\n• JINS ヨドバシAkiba店\n• 飯店Check in 泡湯休息", accommodation: "アールズフォレストイン", notes: "", recommendations: [{ type: 'food', title: '必吃美食', items: [{ name: '蒲田羽林煎餃', jpName: '蒲田羽根つき餃子 (はねつきぎょうざ)' }, { name: '東京醬油拉麵', jpName: '東京醤油ラーメン (とうきょうしょうゆらーめん)' }, { name: '川崎擔擔麵', jpName: 'ニュータンタンメン' }, { name: '味噌餃子', jpName: 'かわさき餃子' }] }, { type: 'souvenir', title: '必買伴手禮', items: [{ name: '羽田限定東京香蕉', jpName: '東京ばな奈 (とうきょうバナナ)' }, { name: '紐約完美起司', jpName: 'NY Perfect Cheese (にゅーよーくぱーふぇくとちーず)' }] }], dialects: [{ phrase: "てやんでぇ", pronunciation: "Te-yandee", meaning: "少說傻話！(江戶男兒口頭禪)", example: "てやんでぇ！そんなことあるかい！", exampleMeaning: "少說傻話！哪有這種事！" }, { phrase: "あたりきしゃりき", pronunciation: "Atariki-Shariki", meaning: "那是理所當然的！", example: "そのくらい、あたりきしゃりきよ！", exampleMeaning: "這種程度的小事，是理所當然的啦！" }], stories: [{ title: "宿場町川崎", titleJp: "宿場町川崎 (しゅくばまちかわさき)", content: "川崎位於多摩川河口，自古以來就是東海道五十三次的重要宿場（驛站）。現在的川崎雖然以工業和現代化商場聞名，但在通往川崎大師的參道上，仍保留著濃厚的江戶庶民風情。", contentJp: "川崎は古くから東海道五十三次の重要な宿場町でした。現在は近代的な街ですが、川崎大師への参道には江戸の風情が残っています。" }, { title: "川崎大師與切糖聲", titleJp: "川崎大師とトントコ飴 (かわさきだいしととんとこあめ)", content: "川崎大師平間寺以「除厄」聞名全日本。參道上最著名的風景是「切糖（Tontoko Ame）」，店員配合著輕快的節奏用菜刀切著軟糖，那充滿活力的「咚咚咚」聲是川崎的音風景。", contentJp: "川崎大師平間寺は「厄除け」で有名です。参道の名物は「とんとこ飴」。リズミカルに飴を切る包丁の音が響き渡ります。" }] },
+      { date: "2026年2月3日", dayLabel: "2/3(火)", route: "出雲 松江", morning: "早餐：羽田空港第１ターミナル\n行程：\n• 5:30 飯店Check out\n--------------------\n京急川崎 5:41 → 羽田空港第１・第２ターミナル 5:54\n京急本線快特(羽田空港第１・第２ターミナル行) 330円\n--------------------\nNH381 HND 6:50 - YGJ 8:15\n--------------------\n米子空港4番のりば発 8:30 → 松江駅 9:15\n米子空港線［松江］(ＪＲ松江駅行)\n松江駅4番のりば発 9:35 → 八重垣神社 9:55\n[松江市営バス]淞北台団地〜駅〜イオン〜神社［６３−１］(八重垣神社行)\n--------------------\n• 八重垣神社\n--------------------\n八重垣神社 10:24 → 大橋北詰 10:50\n[松江市営バス]神社〜イオン〜駅〜淞北台団地［５０−０］(淞北台団地行)\n--------------------\n• 飯店Check in 寄放行李\n• 源助柱記念碑\n--------------------\n松江しんじ湖温泉 11:45 → 川跡 12:33\n一畑電車大社線(川跡行)\n川跡 12:37 → 出雲大社前 12:48\n一畑電車北松江線(松江しんじ湖温泉行) 900円", afternoon: "午餐：神門通り\n行程：\n• 12:50-13:10 稲佐の浜\n• 13:10-14:00 出雲大社\n参拝ルート\n稲佐の浜（いなさのはま）\nAction: 砂を拾う\nNote: 参拝前にここで砂を頂きます\n勢溜の大鳥居（せいだまりのおおとりい）\nAction: 一礼してくぐる\nNote: 参道の端を歩く（真ん中はNG）\n祓社（はらえのやしろ）\nAction: 心身を清める\nNote: 参拝前の穢れを落とします\n手水舎（ちょうずや）\nAction: 手と口を清める (清洗手口)\n拝殿（はいでん）\nAction: 参拝（2礼4拍手1礼）\nNote: 一般的な神社とは拍手の回数が違います\n御本殿・八足門（ごほんでん・やつあしもん）\nAction: 参拝（2礼4拍手1礼）\n素鵞社（そがのやしろ）\nAction: 砂を交換する\nNote: 稲佐の浜の砂を納め、御砂を頂く\n神楽殿（かぐらでん）\nAction: 大注連縄を見る・参拝\n• 14:00-14:30 神門通り午餐\nIzumo Brewing Co. TAISHA\nスターバックス コーヒー 出雲大社店\n坂根屋 ぜんざい餅店\n福乃和\n• 14:30-15:00 旧国鉄大社線大社駅跡\n--------------------\n出雲大社前 15:20 → 松江しんじ湖温泉 16:26\n一畑電車大社線(松江しんじ湖温泉行) 900円\n松江しんじ湖温泉駅1番のりば発 16:55 → 夕日公園前 17:09\n[松江市営バス]レイクライン（夕日鑑賞便）(松江駅行) 210円\n--------------------\n• 宍道湖夕日スポットとるぱ\n--------------------\n嫁ヶ島夕日公園 17:56 → 大橋北詰 18:04\n[松江市営バス]レイクライン（夕日鑑賞便）(松江駅行) 210円\n--------------------\n• 回飯店", evening: "晚餐：呑喰処やまいち\n行程：\n• 19:30 晚餐\n• 20:30 回飯店泡湯休息", accommodation: "御宿 野乃松江\n◆late check-out 至13:00", notes: "◆松江乗手形(共通２日乗車券) 1,050円 Day 1", recommendations: [{ type: 'food', title: '必吃美食', items: [{ name: '出雲割子蕎麥麵', jpName: '出雲割子そば (いずもわりごそば)' }, { name: '出雲紅豆湯 (善哉)', jpName: '出雲ぜんざい (いずもぜんざい)' }, { name: '宍道湖蜆湯', jpName: 'しじみ汁 (しじみじる)' }] }, { type: 'souvenir', title: '必買伴手禮', items: [{ name: '若草 (和菓子)', jpName: '若草 (わかくさ)' }, { name: '泥鰍舞饅頭', jpName: 'どじょう掬いまんじゅう (どじょうすくいまんじゅう)' }] }], dialects: [{ phrase: "だんだん", pronunciation: "Dan-dan", meaning: "謝謝 (非常常用的島根方言)", example: "遠くから来てごして、だんだんね。", exampleMeaning: "大老遠跑來，真是謝謝你啊。" }, { phrase: "ばんじまして", pronunciation: "Banji-mashite", meaning: "晚安 (傍晚時的問候)", example: "ばんじまして。今日も寒かったねわ。", exampleMeaning: "晚安啊。今天也很冷呢。" }], stories: [{ title: "神在月與神無月", titleJp: "神在月と神無月 (かみありづきとかんなづき)", content: "農曆十月在日本被稱為「神無月」，因為全日本的神明都會離開自己的神社，聚集到出雲大社開會。因此，只有在出雲，這個月被稱為「神在月」。神明們在此商討來年的運勢與「結緣」大事。", contentJp: "旧暦10月は日本中で「神無月」と呼ばれますが、出雲だけは「神在月」と呼ばれます。全国の神々が出雲大社に集まり、来年の運勢や「縁結び」について会議（神議り）を行うためです。" }, { title: "神樂殿的大注連繩", titleJp: "神楽殿の大注連縄 (かぐらでんのおおしめなわ)", content: "出雲大社神樂殿懸掛著日本最大的注連繩，長13.6公尺，重達5.2噸。這象徵著神界與凡間的界線。據說站在下方往上看，能感受到巨大的神聖力量壓倒而來。", contentJp: "出雲大社神楽殿には、長さ13.6m、重さ5.2tの日本一の大注連縄が懸かっています。神域と現世の境界を象徴し、下から見上げると圧倒的な神聖な力を感じることができます。" }] },
+      { date: "2026年2月4日", dayLabel: "2/4(水)", route: "松江 大阪", morning: "早餐：飯店\n行程：\n• 7:00 早餐\n--------------------\n新大橋北詰 8:09 → 松江駅 8:15\n[松江市営バス]法吉ループ右回り：公民館［９５］(松江駅行)\n松江 8:34 → 荒島 8:52\n山陰本線(米子行)\n荒島駅 9:07 → 鷺の湯温泉・足立美術館前 9:20\n[安来市コミュニティ]イエローバス［広瀬〜荒島線］(広瀬バスターミナル行)\n--------------------\n• 足立美術館\n--------------------\n鷺の湯温泉・足立美術館前 11:24 → 荒島駅 11:37\n[安来市コミュニティ]イエローバス［広瀬〜荒島線］(荒島駅行)\n荒島 11:45 → 松江 12:01\n山陰本線(西出雲行)\n松江駅 11:30 3番のりば発 → 大橋北詰 12:15\n[松江市営バス]駅〜温泉駅〜朝日ヶ丘〜授産Ｃ［３５］(授産センター行)\n--------------------\n• 13:00 飯店Check out 寄放行李", afternoon: "午餐：未定\n行程：\n• カラコロ広場搭堀川遊覧船到ふれあい広場\n• 小泉八雲記念館\n• 小泉八雲旧居\n• 松江城\n• 松江歴史館\n• 喫茶 きはる\n--------------------\n国宝松江城県庁前 15:40 → 大橋北詰 15:44\n[一畑バス]２１八雲線(八雲車庫行)\n--------------------\n• 回飯店取行李\n--------------------\n大橋北詰 16:03 → 県立美術館前 16:10\n[松江市営バス]レイクライン(松江駅行)\n--------------------\n• 16:30-17:50 島根県立美術館\n--------------------\n県立美術館前 17:59 → 松江駅 18:10\n[松江市営バス]レイクライン（夕日鑑賞便）(松江駅行)", evening: "晚餐：駅弁 (松江駅弁 一文字家)\n・島根牛みそ玉丼 (島根牛味噌玉丼)\n・かに寿し (蟹肉壽司)\n・大山おこわ (大山糯米飯)\n行程：\n• 車站採買\n--------------------\n松江駅9番のりば 18:50 → 大阪梅田 23:27\nくにびき(大阪梅田行)\n大阪梅田 23:35 → 十三 23:38\n阪急神戸線(西宮北口行)\n--------------------\n• 飯店Check in", accommodation: "東横INN大阪阪急十三駅西口2", notes: "◆松江乗手形(共通２日乗車券) Day 2\n\n◆預約くにびき：1/2 台灣時間 23:00\n\n◆景點使用 Discover Another Japan Pass 1-Day San'in Pass", recommendations: [{ type: 'food', title: '必吃美食', items: [{ name: '松江和菓子', jpName: '松江和菓子 (まつえわがし)' }, { name: '島根和牛', jpName: 'しまね和牛 (しまねわぎゅう)' }] }, { type: 'souvenir', title: '必買伴手禮', items: [{ name: '薄皮饅頭', jpName: '薄小倉 (うすおぐら)' }, { name: '瑪瑙工藝品', jpName: 'めのう細工 (めのうざいく)' }] }], dialects: [{ phrase: "げげ", pronunciation: "Gege", meaning: "哎呀！(驚訝)", example: "げげ！財布忘れたわ！", exampleMeaning: "哎呀！我忘記帶錢包了！" }, { phrase: "そげ", pronunciation: "Soge", meaning: "那樣/是喔", example: "そげそげ、そげだわ。", exampleMeaning: "對對，就是那樣。" }], stories: [{ title: "日本第一的庭園", titleJp: "日本一の庭園 (にほんいちのていえん)", content: "足立美術館連續多年被美國雜誌評為「日本第一庭園」。館長足立全康相信「庭園也是一幅畫」，因此館內的窗戶都被設計成「掛軸」或「畫框」的形式，讓四季變化的庭園景色成為美術館最生動的收藏品。", contentJp: "足立美術館は米国の専門誌で長年「日本一の庭園」に選ばれています。「庭園もまた一幅の絵画である」という創設者の信念のもと、窓枠を額縁に見立てた「生の掛軸」や「生の額絵」は必見です。" }] },
+      { date: "2026年2月5日", dayLabel: "2/5(木)", route: "大阪 青森", morning: "早餐：飯店\n行程：\n• 6:30 早餐\n• 7:10 飯店Check out\n--------------------\n十三 7:32 → 蛍池 7:44\n阪急宝塚線急行(宝塚行)\n蛍池 7:32 → 伊丹空港 7:56\n大阪モノレール(大阪空港行)\n--------------------\nNH1851 ITM 09:00 - AOJ 10:45\n--------------------\n青森空港 11:10 → 新町一丁目 11:44\n青森空港線 (青森駅前行)\n--------------------\n• 飯店寄放行李", afternoon: "午餐：味の札幌 大西\n行程：\n古川 4番のりば13:05 → 県立美術館前 13:22\n[青森市営バス]Ｓ５１三内丸山遺跡(県立美術館線)\n--------------------\n• 青森県立美術館\n• Cafe 4 Cats\n--------------------\n県立美術館前 15:16 → 西上古川 15:30\n[青森市営バス]Ａ１西滝→青森駅(国道・古川線)\n--------------------\n• 青森市森林博物館\n--------------------\n森林博物館前 16:38 → 古川 16:48\n[青森市営バス]Ｋ３４市民病院(観光通り線)\n--------------------\n• MIA COFFEE ROASTERS\n• 飯店Check in", evening: "晚餐：19:00 助六 青森駅前アウガ隣店\n行程：", accommodation: "まちなか温泉青森センターホテル", notes: "◆預約助六：1/4 台灣時間 23:00", recommendations: [{ type: 'food', title: '必吃美食', items: [{ name: '味噌咖哩牛奶拉麵', jpName: '味噌カレー牛乳ラーメン (みそかれーぎゅうにゅうらーめん)' }, { name: '海鮮蓋飯 (Nokkedon)', jpName: 'のっけ丼 (のっけどん)' }] }, { type: 'souvenir', title: '必買伴手禮', items: [{ name: '蘋果派', jpName: 'アップルパイ (あっぷるぱい)' }, { name: '津輕玻璃', jpName: '津軽びいどろ (つがるびいどろ)' }] }], dialects: [{ phrase: "わ", pronunciation: "Wa", meaning: "我 (第一人稱)", example: "わ、青森が好きだ。", exampleMeaning: "我喜歡青森。" }, { phrase: "めが", pronunciation: "Mega", meaning: "好吃 (津輕方言)", example: "このラーメン、たんげめが！", exampleMeaning: "這碗拉麵超級好吃！" }], stories: [{ title: "味噌咖哩牛奶拉麵的誕生", titleJp: "味噌カレー牛乳ラーメン (みそかれーぎゅうにゅうらーめん)", content: "這聽起來像是大冒險輸了的懲罰遊戲，但其實是青森市民的靈魂美食。據說起源於一位想讓學生吃得營養飽足的店主，將咖哩、味噌和牛奶融合，意外創造出溫潤濃厚、微辣順口的奇蹟湯頭。", contentJp: "罰ゲームのような名前ですが、青森市民のソウルフードです。学生に栄養満点の食事をさせたいと考えた店主が、カレー、味噌、牛乳を組み合わせたところ、まろやかでコクのある奇跡のスープが誕生しました。" }] },
+      { date: "2026年2月6日", dayLabel: "2/6(金)", route: "青森 弘前", morning: "早餐：飯店\n行程：\n• 7:40 早餐\n• 8:40 飯店Check out 寄放行李\n• 9:00 青函連絡船メモリアルシップ八甲田丸\n• 10:00 A-FACTORY\n• 10:50 ねぶたの家 ワ･ラッセ", afternoon: "午餐：青森魚菜センター本店\n行程：\n• 12:00 午餐\n• 13:10 回飯店拿行李\n--------------------\n青森 13:35 → 弘前 14:20\n奥羽本線(弘前行)\n弘前駅城東口2番のりば発 14:35 → 城東中央三丁目 14:36\n[弘南バス]８系統(マックスバリュ安原店前行)\n--------------------\n• ボンジュール弘前城東店外帶蘋果派\n--------------------\n城東二丁目 15:06 → 弘前バスターミナル 15:12\n[弘南バス]６系統(弘前バスターミナル行)\n弘前バスターミナル2番のりば 15:15 → 土手町十文字 15:20\n[弘南バス]９０系統(黒石駅前行)\n--------------------\n• 飯店Check in\n• 15:40 弘前れんが倉庫美術館\n--------------------\n住吉入口 16:44 → 弘前バスターミナル前 16:49\n[弘南バス]１５系統(弘前駅前行)\n--------------------\n• ロピア 弘前店", evening: "晚餐：はすや\n行程：\n弘前バスターミナル5番のりば 18:00 → 土手町十文字 18:04\n[[弘南バス]４０系統(農村環境改善センター前行)\n--------------------\n• 18:30-19:50 飯店 Happy Hour\n• 20:00 晚餐品酒\n• 22:00 飯店泡湯休息", accommodation: "スーパーホテル 弘前\n◆ウェルカムバー15:00～20:00\n◆天然温泉　ねぷたの湯\n入浴時間(男女入替制)\n【男性】\n15:00～18:20、21:30～ 翌朝6:20\n【女性】\n18:30～21:20、翌朝6:30～9:30", notes: "◆津軽フリーパス Day 1", recommendations: [{ type: 'food', title: '必吃美食', items: [{ name: '弘前法式料理', jpName: '弘前フレンチ (ひろさきふれんち)' }, { name: 'Igamenchi (炸魷魚餅)', jpName: '伊賀メンチ (いがめんち)' }] }, { type: 'souvenir', title: '必買伴手禮', items: [{ name: '蘋果酒 (Cider)', jpName: 'シードル (しーどる)' }, { name: '小山煎餅', jpName: '小山せんべい (こやませんべい)' }] }], dialects: [{ phrase: "へば", pronunciation: "Heba", meaning: "再見 (Bye Bye)", example: "へば、また明日な。", exampleMeaning: "那麼，明天見囉。" }, { phrase: "な", pronunciation: "Na", meaning: "你 (與「Wa」相對)", example: "なも、元気でな。", exampleMeaning: "你也要保重喔。" }], stories: [{ title: "弘前的蘋果派地圖", titleJp: "弘前アップルパイガイドマップ (ひろさきあっぷるぱいがいどまっぷ)", content: "弘前市是日本蘋果產量第一的城市，市內有超過40家店舖販售蘋果派。官方甚至製作了「蘋果派地圖」，標示每家店的甜度、酸度、肉桂濃度。在雪中漫步尋找自己最愛的口味，是弘前冬天的樂趣。", contentJp: "弘前は日本一のりんご生産地で、市内40軒以上でアップルパイが販売されています。「アップルパイガイドマップ」には、各店の甘さ、酸味、シナモンの強さが記されています。" }] },
+      { date: "2026年2月7日", dayLabel: "2/7(土)", route: "弘前", morning: "早餐：飯店\n行程：\n• 7:20 早餐\n--------------------\n住吉入口 8:16 → 弘前駅前 8:22\n[弘南バス]Ｈ１５(弘前駅前行)\n弘前 8:48 → 五所川原 9:26\nリゾートしらかみ2号(秋田行)\n--------------------\n• 搭乘ストーブ列車\n津軽五所川原 9:35 - 津軽中里 10:18\n津軽中里 10:46 - 津軽五所川原 11:29\n車上烤魷魚需要現金，在津輕五所川原站的售票口出示「津輕 Free Pass」，跟站員說要去「中里」，並要搭「ストーブ列車」。站員會直接幫您算出需要補的差額（金木-中里運賃 + 暖爐券）\n--------------------\n五所川原12:10 → 弘前 12:48\nリゾートしらかみ1号(青森行)\n弘前駅前6番のりば発 13:01 → りんご公園 13:21\n[弘南バス]２１系統(西目屋村役場前行)", afternoon: "午餐：りんごの家\n行程：\n• りんごの家\n• 弘前シードル工房kimori\n--------------------\nりんご公園 14:58 → 弘前商工会議所前 15:11\n[弘南バス]２１系統(弘前駅前行)\n--------------------\n• 津軽藩ねぷた村\n--------------------\n亀の甲町角 16:25 → 中央通り二丁目 16:32\n[弘南バス]４０系統(弘前駅前行)\n--------------------\n• 回飯店Happy Hour", evening: "晚餐：未定\n行程：\n土手町十文字 17:40 → 市役所前公園入口 17:47\n[弘南バス]３５０系統(藤代車庫行)\n--------------------\n• 弘前城雪燈籠まつり\n• 弘前公園物産館\n• 19:00 花火\n• スターバックスコーヒー 弘前公園前店", accommodation: "スーパーホテル 弘前\n◆ウェルカムバー15:00～20:00\n◆天然温泉　ねぷたの湯\n入浴時間(男女入替制)\n【男性】\n15:00～18:20、21:30～ 翌朝6:20\n【女性】\n18:30～21:20、翌朝6:30～9:30", notes: "◆津軽フリーパス Day 2\n◆預約リゾートしらかみ：1/7 台灣時間9:00", recommendations: [{ type: 'food', title: '必吃美食', items: [{ name: '烤魷魚', jpName: 'スルメ (するめ)' }, { name: '蘋果咖哩', jpName: 'りんごカレー (りんごかれー)' }] }, { type: 'souvenir', title: '必買伴手禮', items: [{ name: '津輕塗筷子', jpName: '津軽塗箸 (つがるぬりばし)' }, { name: '太宰治文庫本筆記', jpName: '太宰治ノート (だざいおさむのーと)' }] }], dialects: [{ phrase: "めぐせ", pronunciation: "Meguse", meaning: "害羞/不好意思", example: "人前で話すのはめぐせ。", exampleMeaning: "在人前說話很不好意思。" }, { phrase: "わらはんど", pronunciation: "Warahando", meaning: "孩子們", example: "わらはんどが遊んでら。", exampleMeaning: "孩子們在玩耍。" }], stories: [{ title: "暖爐列車", titleJp: "ストーブ列車 (すとーぶれっしゃ)", content: "津輕鐵道的暖爐列車是冬季限定的風物詩。復古的車廂內設有燒煤炭的達摩暖爐，車掌會幫忙在爐上烤魷魚。一邊吃著熱騰騰的魷魚，喝著日本酒，一邊看著窗外的地吹雪，是津輕冬天的極致體驗。", contentJp: "津軽鉄道のストーブ列車は冬の風物詩です。レトロな車内には石炭を燃やすダルマストーブがあり、車掌さんがスルメを焼いてくれます。熱々のスルメと日本酒を楽しみながら眺める地吹雪は格別です。" }] },
+      { date: "2026年2月8日", dayLabel: "2/8(日)", route: "弘前 大阪", morning: "早餐：飯店\n行程：\n• 7:20 早餐\n• 8:40 飯店Check out 寄放行李\n--------------------\n土手町十文字 8:55 → 市役所前公園入口 9:02\n[弘南バス]３５０系統(藤代車庫行)\n--------------------\n• 9:30 大正浪漫喫茶室\n• 10:30 弘前城\n• 12:00 旧第五十九銀行本店本館\n• 12:40 PÂTISSERIE LE CHOCOLAT外帶蘋果派", afternoon: "午餐：il filo(イルフィーロ)\n行程：\n• 13:00 午餐\n• 15:00 飯店拿行李\n• 計程車到弘前バスターミナル\n--------------------\n弘前ＢＴ 15:50 → 青森空港 16:45\n青森空港線［弘前］(青森空港行)\n--------------------\nNH1856 AOJ 17:35 - ITM 19:40", evening: "晚餐：未定\n行程：\n大阪伊丹空港11番のりば発 20:11 → あべの橋駅 20:40\n伊丹空港線(あべの橋駅［天王寺駅］行)\n天王寺11番線発 20:48 → 鶴橋 20:53\n大阪環状線鶴橋方面\n--------------------\n• 飯店Check in\n• 晚餐", accommodation: "東横INN大阪鶴橋駅前", notes: "", recommendations: [{ type: 'food', title: '必吃美食', items: [{ name: '鶴橋燒肉', jpName: '鶴橋焼肉 (つるはしやきにく)' }, { name: '韓式煎餅', jpName: 'チヂミ (ちぢみ)' }] }, { type: 'souvenir', title: '必買伴手禮', items: [{ name: '韓國海苔', jpName: '韓国海苔 (かんこくのり)' }, { name: '泡菜', jpName: 'キムチ (きむち)' }] }], dialects: [{ phrase: "なんでやねん", pronunciation: "Nande-yanen", meaning: "為什麼啊！/ 搞什麼！(吐槽專用)", example: "A: 今日は奢りや！ B: なんでやねん！", exampleMeaning: "A: 今天你請客！ B: 為什麼啦！" }, { phrase: "あかん", pronunciation: "Akan", meaning: "不行 / 糟糕", example: "あかん、遅刻する！", exampleMeaning: "糟糕，要遲到了！" }], stories: [{ title: "大正浪漫喫茶室", titleJp: "大正浪漫喫茶室 (たいしょうろまんきっさしつ)", content: "位於藤田紀念庭園洋館內，這裡是以前弘前富商的別墅。在挑高的天花板、復古的吊燈下，品嚐使用弘前蘋果製作的蘋果派和紅茶，窗外則是白雪覆蓋的日式庭園，完美重現了大正時代的優雅氛圍。", contentJp: "藤田記念庭園の洋館にある喫茶室です。高い天井やレトロな照明の下、弘前産りんごのアップルパイと紅茶を楽しめます。窓の外には雪景色の日本庭園が広がり、大正時代の優雅な時間を体験できます。" }] },
+      { date: "2026年2月9日", dayLabel: "2/9(月)", route: "大阪 新宮", morning: "早餐：飯店\n行程：\n• 6:30 早餐\n• 7:20 飯店Check out\n--------------------\n鶴橋 7:39 → 天王寺 7:45\n大阪環状線天王寺方面\n天王寺15番線発 7:59 → 新宮 11:59\nくろしお1号(新宮行)\n--------------------\n• 飯店Check in 寄放行李", afternoon: "午餐：未定\n行程：\n• 熊野速玉大社\n--------------------\n速玉大社前 13:29 → 本宮大社前 14:24\n[熊野御坊南海バス]５１川丈線(本宮大社前行)\n--------------------\n• 熊野本宮大社\n４つの社殿があり、左から\n第一殿　夫須美大神（ふすみのみこと）千手観音（現世を司る）\n第二殿　速玉大神（はやたまのおおかみ） 薬師如来（前世を司る）\n第三殿　本宮大社の主祭神、家津御子大神(けつみこのおおかみ）阿弥陀如来（来世を司る ）\n第四殿　天照大神　十一面観音\n拝殿の一番右側が、結びの神様　八百万の神\n参拝の順は、①本宮大社の主祭神である第三殿→②第二殿→③第一殿→④第四殿→⑤結びの神の順番です\n• 大斎原\n--------------------\n本宮大社前 16:00 → 新宮城跡前 17:07\n[熊野御坊南海バス]５１川丈線(新宮駅行)\n--------------------\n• オークワ新宮仲之町店超市採買", evening: "晚餐：オークワ新宮仲之町店超市採買\n行程：\n• 飯店晚餐和泡湯", accommodation: "ホテルニューパレス", notes: "◆JR西日本關西廣域鐵路周遊券 Day 1（1/8 台灣時間 23:00預定）\n◆熊野御坊南海バス悠遊フリー乗車券 Day 1", recommendations: [{ type: 'food', title: '必吃美食', items: [{ name: '高菜壽司', jpName: 'めはり寿司 (めはりずし)' }, { name: '香魚料理', jpName: '鮎料理 (あゆりょうり)' }] }, { type: 'souvenir', title: '必買伴手禮', items: [{ name: '八咫烏御守', jpName: '八咫烏のお守り (やたがらすのおまもり)' }, { name: '鈴燒', jpName: '鈴焼き (すずやき)' }] }], dialects: [{ phrase: "つれもていこら", pronunciation: "Tsuremote-ikora", meaning: "大家一起走吧 (和歌山名句)", example: "つれもていこら。", exampleMeaning: "我們大家一起走吧。" }, { phrase: "おおきに", pronunciation: "Ookini", meaning: "謝謝 (關西/和歌山通用)", example: "まいど、おおきに！", exampleMeaning: "每次都謝謝光顧！" }], stories: [{ title: "八咫烏的傳說", titleJp: "八咫烏の伝説 (やたがらすのでんせつ)", content: "在熊野三山到處都能看到三隻腳的烏鴉標誌，那就是「八咫烏」。在日本神話中，這隻烏鴉受天照大神之命，為神武天皇帶路。因此，它被視為「導引之神」，也是日本足球國家隊的象徵（寓意將球導向球門）。", contentJp: "熊野三山では3本足のカラス「八咫烏」を見かけます。神話で神武天皇を導いたとされる「導きの神」です。ボールをゴールへ導くという意味で、サッカー日本代表のシンボルにもなっています。" }] },
+      { date: "2026年2月10日", dayLabel: "2/10(火)", route: "新宮 白浜", morning: "早餐：ローソン 新宮駅前店\n行程：\n• 6:20 飯店Check out\n• 6:30 早餐\n--------------------\n新宮 6:53 → 紀伊勝浦 7:15\nきのくに線(紀伊田辺行)\n--------------------\n• 紀伊勝浦駅寄放行李\n--------------------\n紀伊勝浦駅 7:35 → 大門坂 7:54\n[熊野御坊南海バス]３１那智山線(那智山行)\n--------------------\n• 熊野那智大社\n大門坂入口 → 大門坂 → 大門跡 → 表参道 → 熊野那智大社・那智山青岸渡寺 → 三重の塔 → 那智の滝\n-------------------\n那智の滝前 11:09 → 紀伊勝浦駅 11:35\n[熊野御坊南海バス]３１那智山線(紀伊勝浦駅行)\n--------------------\n• 車站取行李", afternoon: "午餐：南紀白浜マリオットホテルラウンジ\n行程：\n紀伊勝浦 11:49 → 白浜 13:19\nくろしお22号(新大阪行)\n白浜駅1番のりば発 13:31 → 走り湯 13:47\n[明光バス]１２白浜田辺線(三段壁行)\n--------------------\n• 飯店 Check in\n• 飯店lounge 午餐\n• 夕陽泡湯", evening: "晚餐：南紀白浜マリオットホテルラウンジ\n行程：\n• 飯店lounge 晚餐\n• 泡湯", accommodation: "南紀白浜マリオットホテル\n◆ティータイム (14:00〜17:00)\n◆ディナータイム (17:00〜20:00)\n◆ナイトタイム (20:00〜22:00)", notes: "◆JR西日本關西廣域鐵路周遊券 Day 2\n◆熊野御坊南海バス悠遊フリー乗車券 Day 2", recommendations: [{ type: 'food', title: '必吃美食', items: [{ name: '勝浦鮪魚', jpName: '勝浦マグロ (かつうらまぐろ)' }, { name: '黑飴冰淇淋', jpName: '那智黒ソフト (なちぐろそふと)' }] }, { type: 'souvenir', title: '必買伴手禮', items: [{ name: '那智黑飴', jpName: '那智黒飴 (なちぐろあめ)' }, { name: '熊野柑橘果汁', jpName: 'みかんジュース (みかんじゅーす)' }] }], dialects: [{ phrase: "あが", pronunciation: "Aga", meaning: "自己/你", example: "あが、何しとんの？", exampleMeaning: "你，在做什麼啊？" }, { phrase: "わえ", pronunciation: "Wae", meaning: "我 (男性用語)", example: "わえ、みかん好きやねん。", exampleMeaning: "我啊，很喜歡蜜柑喔。" }], stories: [{ title: "那智瀑布", titleJp: "那智の滝 (なちのたき)", content: "落差133公尺，是日本落差最大的單段瀑布。在神道教中，瀑布本身就是神體（飛瀧神社）。感受水花飛濺的震撼，被視為能延年益壽。旁邊的三重塔與瀑布同框的畫面，是日本最具代表性的風景之一。", contentJp: "落差133m、一段の滝としては日本一です。滝そのものが御神体（飛瀧神社）です。しぶきを浴びると延命長寿のご利益があると言われます。三重塔と滝の共演は日本を代表する絶景です。" }] },
+      { date: "2026年2月11日", dayLabel: "2/11(水)", route: "白浜 京都", morning: "早餐：飯店\n行程：\n• 8:00 早餐\n• 9:40 飯店Check out\n--------------------\n走り湯 9:52 → 白浜駅 10:08\n[明光バス]１１白浜田辺線(紀伊田辺駅行)\n白浜 10:26 → 大阪 12:46\nくろしお14号(新大阪行)\n大阪梅田1番線発 13:00 → 京都河原町 13:43\n阪急京都線特急(京都河原町行)", afternoon: "午餐：未定\n行程：\n• 飯店Check in\n• 京都散策", evening: "晚餐：すいば\n行程：\n• NISHITOMIYA買可樂餅\n• 飯店Happy Hour\n• 晚餐", accommodation: "スーパーホテル 京都・四条河原町\n◆ウェルカムバー（18:00～20:00）\n◆天然温泉　御所の湯\n入浴時間\n【男性】\n17:00～19:50、23:00～翌朝6:50\n【女性】\n15:00～16:50、20:00～22:50、翌朝7:00～9:30", notes: "◆JR西日本關西廣域鐵路周遊券 Day 3", recommendations: [{ type: 'food', title: '必吃美食', items: [{ name: '焦香味噌拉麵', jpName: '焦がし味噌ラーメン (こがしみそらーめん)' }, { name: '京都可樂餅', jpName: '京都コロッケ (きょうところっけ)' }] }, { type: 'souvenir', title: '必買伴手禮', items: [{ name: '阿闍梨餅', jpName: '阿闍梨餅 (あじゃりもち)' }, { name: '七味粉', jpName: '七味唐辛子 (しちみとうがらし)' }] }], dialects: [{ phrase: "おこしやす", pronunciation: "Okoshi-yasu", meaning: "歡迎光臨 (比Irasshaimase更優雅)", example: "遠くから来てごして、おこしやす。", exampleMeaning: "大老遠跑來，歡迎光臨。" }, { phrase: "ほな", pronunciation: "Hona", meaning: "那麼", example: "ほな、さいなら。", exampleMeaning: "那麼，再見囉。" }], stories: [{ title: "阪急電車的優雅", titleJp: "阪急電車 (はんきゅうでんしゃ)", content: "連接大阪與京都的阪急電車，以其「栗色（Maroon Color）」的車身和橄欖色的絨毛座椅聞名。它被稱為「關西最高級、最優雅的私鐵。特急列車不需加價，卻能享受舒適的移動時光。", contentJp: "マルーンカラーの車体とオリーブ色のふかふかシートで知られる阪急電車は、関西で最もエレガントな私鉄と言われています。特急料金なしで快適な移動を楽しめます。" }] },
+      { date: "2026年2月12日", dayLabel: "2/12(木)", route: "京都 鳥取", morning: "早餐：飯店\n行程：\n• 8:00 早餐\n• 8:50 飯店Check out\n--------------------\n京都河原町 8:16 → 烏丸 8:18\n阪急京都線準特急(大阪梅田［阪急］行)\n四条 8:24 → 京都 8:28\n京都地下鉄烏丸線(竹田行)\n京都6番線発 8:50 → 鳥取 11:58\nスーパーはくと3号(倉吉行)\n--------------------\n• 飯店Check in 寄放行李", afternoon: "午餐：喫茶 ベニ屋\n行程：\n鳥取駅0番のりば発 12:30 → 砂丘会館 12:52\n[日本交通]３９鳥取砂丘線(砂丘会館行)\n--------------------\n• 砂丘観光リフト\n• 砂丘センター眺望テラス\n• 鳥取砂丘ビジターセンター\n• 鳥取砂丘\n--------------------\n砂丘会館 14:40 → 本通り 15:00\n[日ノ丸バス]鳥取砂丘線(鳥取駅行)\n--------------------\n• 午餐\n--------------------\n本通り 15:48 → 西町 15:53\n[日本交通]３８北園団地線(北園ニュータウン行)\n--------------------\n• 鳥取県立博物館\n• 鳥取城跡\n--------------------\n市立武道館 17:44 → 鳥取市移住・交流情報ガーデン前 17:51\n[鳥取市コミュニティ]くる梨［緑コース］(パレットとっとり前行)", evening: "晚餐：たくみ割烹店\n行程：\n• 18:00 居酒屋喝酒\n• 19:30 飯店Happy Hour\n• 泡湯", accommodation: "スーパーホテル 鳥取駅北口\n◆ウェルカムバー（18:00～21:00）\n◆天然温泉　因幡の湯\n入浴時間\n【男性】\n15:00～19:50、22:10～翌朝5:50\n【女性】\n20:00～22:00、翌朝6:00～9:30", notes: "◆JR西日本關西廣域鐵路周遊券 Day 4\n◆鳥取藩乗放題手形 Day 1", recommendations: [{ type: 'food', title: '必吃美食', items: [{ name: '鳥取咖哩', jpName: '鳥取カレー (とっとりかれー)' }, { name: '猛者蝦', jpName: 'モサエビ (もさえび)' }] }, { type: 'souvenir', title: '必買伴手禮', items: [{ name: '砂丘之卵', jpName: '砂丘のたまご (さきゅうのたまご)' }, { name: '鳥取沙丘辣韮', jpName: '砂丘らっきょう (さきゅうらっきょう)' }] }], dialects: [{ phrase: "えらい", pronunciation: "Erai", meaning: "累 / 辛苦", example: "今日はえらかったわー。", exampleMeaning: "今天真是累壞了啊。" }], stories: [{ title: "砂之美術館", titleJp: "砂の美術館 (すなのびじゅつかん)", content: "這是世界上唯一使用「沙」作為素材的室內雕刻美術館。每年會更換主題，邀請世界各國的沙雕藝術家創作。由於沙雕最終會回歸自然，這種「期間限定」的藝術形式，更讓人感受到作品的珍貴與無常之美。", contentJp: "世界で唯一「砂」を素材にした彫刻作品を展示する屋内美術館です。毎年テーマを変えて展示されます。最終的に砂に還る儚さが、作品の美しさを際立たせます。" }] },
+      { date: "2026年2月13日", dayLabel: "2/13(金)", route: "倉吉 鳥取", morning: "早餐：飯店\n行程：\n• 7:30 早餐\n--------------------\n鳥取 8:25 → 倉吉 8:55\nスーパーまつかぜ3号(米子行)\n倉吉駅2番のりば発 9:05 → 倉吉パークスクエア北口 9:13\n[日ノ丸バス]赤碕線由良駅・浦安駅\n--------------------\n• 鳥取県立美術館\n• 倉吉パークスクエア\n• 鳥取二十世紀梨記念館\n--------------------\n倉吉パークスクエア 10:37 → 赤瓦・白壁土蔵 10:42\n[日ノ丸バス]横田線(久米中学校行)\n--------------------\n• 倉吉白壁土蔵群\n--------------------\n赤瓦・白壁土蔵 12:38 → 倉吉駅 12:50\n[日ノ丸バス]栄線倉吉駅〜西亀谷\n倉吉 13:01 → 鳥取 13:30\nスーパーまつかぜ8号(鳥取行)\n鳥取 13:35 → 湖山 13:39\n山陰本線(倉吉行)", afternoon: "午餐：ブッシェリーはなふさ(Boucherie Hanafusa)\n行程：\n• 13:50-15:00 午餐\n--------------------\n湖山駅前 15:18 → 白兎神社前 15:32\n[日ノ丸バス]白兎海岸線(鹿野営業所行)\n--------------------\n• 白兎神社\n• すなば珈琲(道の駅神話の里白兎店)\n--------------------\n白兎神社前 17:06 → 浜村駅 17:26\n[日ノ丸バス]白兎海岸線(鹿野営業所行)\n--------------------\n• 浜村駅「足湯」\n--------------------\n浜村 17:48 → 鳥取 18:32\n山陰本線(鳥取行)\n--------------------\n• 車站買アベ鳥取堂的かにづくし弁当", evening: "晚餐：魚鮮水産 シャミネ鳥取店\n行程：\n• イオン鳥取店採買\n• 飯店Happy Hour\n• 21:00 居酒屋喝酒\n• 泡湯", accommodation: "スーパーホテル 鳥取駅北口\n◆ウェルカムバー（18:00～21:00）\n◆天然温泉　因幡の湯\n入浴時間\n【男性】\n15:00～19:50、22:10～翌朝5:50\n【女性】\n20:00～22:00、翌朝6:00～9:30", notes: "◆JR西日本關西廣域鐵路周遊券 Day 5\n◆鳥取藩乗放題手形 Day 2", recommendations: [{ type: 'food', title: '必吃美食', items: [{ name: '牛骨拉麵', jpName: '牛骨ラーメン (ぎゅうこつらーめん)' }, { name: '蟹肉便當', jpName: 'かに寿し (かにずし)' }] }, { type: 'souvenir', title: '必買伴手禮', items: [{ name: '打吹公園丸子', jpName: '打吹公園だんご (うつぶきこうえんだんご)' }, { name: '梨子果凍', jpName: '梨ゼリー (なしぜりー)' }] }], dialects: [{ phrase: "がいな", pronunciation: "Gaina", meaning: "巨大的 / 很厲害", example: "がいな祭りだね。", exampleMeaning: "真是盛大的祭典啊。" }, { phrase: "だらず", pronunciation: "Darazu", meaning: "笨蛋 (罵人笨拙)", example: "お前はほんとにダラズだなあ。", exampleMeaning: "你還真是個笨蛋啊。" }], stories: [{ title: "超級白兔號", titleJp: "特急スーパーはくと (とっきゅうすーぱーはくと)", content: "連接京阪神與鳥取的特急列車。「白兔」之名源自神話。車輛配備了擺錘式裝置，能在彎道多多的智頭急行線上高速行駛。特別推薦搶第一車廂的展望席，可以看見駕駛員視角的風景。", contentJp: "京阪神と鳥取を結ぶ特急です。「はくと」は神話に由来します。振り子装置を搭載し、山間部を高速で駆け抜けます。先頭車両の展望席からは迫力ある景色が楽しめます。" }] },
+      { date: "2026年2月14日", dayLabel: "2/14(土)", route: "鳥取 東京", morning: "早餐：飯店\n行程：\n• 6:30 早餐\n• 7:20 飯店Check out\n--------------------\n鳥取駅バスターミナル2番 7:45 → 鳥取空港 8:05\n空港～鳥取駅区間連絡バス\n--------------------\nNH294 TTJ 8:55 - HND 10:10", afternoon: "午餐：\n行程：", evening: "晚餐：\n行程：", accommodation: "東横INN浅草蔵前2", notes: "", recommendations: [{ type: 'food', title: '必吃美食', items: [{ name: '猛者蝦', jpName: 'モサエビ (もさえび)' }, { name: '鳥取和牛', jpName: '鳥取和牛 (とっとりわぎゅう)' }] }, { type: 'souvenir', title: '必買伴手禮', items: [{ name: '因幡白兔饅頭', jpName: '因幡の白うさぎ (いなばのしらうさぎ)' }, { name: '砂丘咖啡', jpName: '砂丘珈琲 (さきゅうこーひー)' }] }], dialects: [{ phrase: "ようきんさった", pronunciation: "You-kinsatta", meaning: "歡迎光臨 (Welcome)", example: "鳥取へようきんさった！", exampleMeaning: "歡迎來到鳥取！" }, { phrase: "せこい", pronunciation: "Sekoi", meaning: "辛苦/累 (不是小氣喔)", example: "あー、せこい、せこい。", exampleMeaning: "啊，好累好累。" }], stories: [{ title: "鳥取砂丘的風紋", titleJp: "鳥取砂丘の風紋 (とっとりさきゅうのふうもん)", content: "經歷十萬年歲月形成的日本最大級砂丘。清晨，當風吹過無人的砂面，會形成美麗的波浪狀「風紋」，被稱為「風的藝術」。站在「馬之背」頂端，眼前是日本海的驚濤駭浪，背後是連綿的沙漠，景色壯絕。", contentJp: "十万年の歳月が作った日本最大級の砂丘です。風が吹くと砂面に美しい「風紋」が現れ、「風の芸術」と呼ばれます。「馬の背」からは日本海と砂漠の対比が楽しめます。" }] },
+      { date: "2026年2月15日", dayLabel: "2/15(日)", route: "東京", morning: "早餐：飯店\n行程：", afternoon: "午餐：\n行程：", evening: "晚餐：\n行程：", accommodation: "東横INNアキバ浅草橋駅東口 11120円", notes: "", recommendations: [{ type: 'food', title: '必吃美食', items: [{ name: '文字燒', jpName: 'もんじゃ焼き (もんじゃやき)' }, { name: '江戶前壽司', jpName: '江戸前寿司 (えどまえずし)' }] }, { type: 'souvenir', title: '必買伴手禮', items: [{ name: '人形燒', jpName: '人形焼 (にんぎょうやき)' }, { name: '雷米香', jpName: '雷おこし (かみなりおこし)' }] }], dialects: [{ phrase: "べらんめえ", pronunciation: "Beranmee", meaning: "江戶人的粗獷語氣", example: "べらんめえ！こちとら江戸っ子だい！", exampleMeaning: "少囉嗦！老子可是江戶兒女！" }, { phrase: "いき", pronunciation: "Iki", meaning: "帥氣 / 瀟灑 (粹)", example: "その着こなし、粋だねえ。", exampleMeaning: "那樣的穿著真是瀟灑啊。" }], stories: [{ title: "浅草橋的問屋街", titleJp: "浅草橋の問屋街 (あさくさばしのとんやがい)", content: "您住宿的淺草橋是著名的「人形與飾品批發街」。從江戶時代起，這裡就聚集了許多製作雛人形的職人。現在則是手工藝愛好者的天堂，販售各種珠寶配件、皮革和包裝材料，價格非常實惠。", contentJp: "浅草橋は「人形と問屋の街」です。江戸時代から雛人形の職人が集まっていました。現在はビーズや革製品などの手芸用品店が並び、ハンドメイド好きの聖地となっています。" }] },
+      { date: "2026年2月16日", dayLabel: "2/16(月)", route: "東京 高雄", morning: "早餐：ANA Lounge\n行程：\n浅草橋 8:28 → 成田空港 9:40\n京成成田スカイアクセスアクセス特急(成田空港行) 1,380円", afternoon: "午餐：機內\n行程：\nBR107 NRT 12:25 - KHH 15:45", evening: "晚餐：\n行程：", accommodation: "", notes: "", recommendations: [{ type: 'food', title: '必吃美食', items: [{ name: '成田鰻魚飯', jpName: '成田のうなぎ (なりたのうなぎ)' }, { name: '機上餐', jpName: '機内食 (きないしょく)' }] }, { type: 'souvenir', title: '最後採購', items: [{ name: 'Royce巧克力', jpName: 'ロイズ (ろいず)' }, { name: '薯條三兄弟', jpName: 'じゃがポックル (じゃがぽっくる)' }] }], dialects: [{ phrase: "またね", pronunciation: "Matane", meaning: "下次見", example: "日本、楽しかった？またね！", exampleMeaning: "日本好玩嗎？下次見囉！" }, { phrase: "お元気で", pronunciation: "Ogenkide", meaning: "保重", example: "台湾でもお元気で！", exampleMeaning: "回台灣也要保重喔！" }], stories: [{ title: "成田山的鰻魚", titleJp: "成田山のうなぎ (なりたさんのうなぎ)", content: "成田機場附近的成田山新勝寺表參道上，有許多鰻魚飯老店。因為成田山距離海邊較遠，江戶時代的人們習慣用利根川的鰻魚來招待客人。如果在去機場前有時間，這裡是最後享受日本美食的絕佳地點。", contentJp: "成田山新勝寺の表参道にはうなぎ屋が並んでいます。海から離れていたため、川魚で客をもてなす文化が根付きました。帰国前の最後の日本食に最適です。" }] }
+    ];
+
+    const AIRPORT_NAMES = { TSA: '台北松山', TPE: '台北桃園', HND: '東京羽田', NRT: '東京成田', ITM: '大阪伊丹', KIX: '大阪関西', KHH: '高雄', AOJ: '青森', IZO: '出雲', TTJ: '鳥取', ICN: '首爾仁川', YGJ: '米子鬼太郎' };
+    const FLIGHT_TERMINALS = { 'BR190': { origin: 'T1', dest: 'T3' }, 'BR154': { origin: 'T2', dest: 'T1' }, 'JL277': { origin: 'T1', dest: '' }, 'NH1851': { origin: '南', dest: '' }, 'NH1856': { origin: '', dest: '南' }, 'NH298': { origin: '', dest: 'T2' }, 'NH294': { origin: '', dest: 'T2' }, 'NH381': { origin: 'T2', dest: '' }, 'BR107': { origin: 'T1', dest: '' }, 'OZ381': { origin: 'T2', dest: 'T1' } };
+    const MEAL_SUGGESTIONS = {
+        '2/2(月)': { '晚餐': '怪獣酒場 (川崎怪獸主題居酒屋)\n中華成喜 (川崎味噌沾醬餃子)\n元祖ニュータンタンメン本舗 (川崎靈魂美食)' },
+        '2/3(火)': { '早餐': 'Hitoshinaya (高湯粥)\nカリーうどん Cuud (咖哩烏龍麵)\n羽田大勝軒 (早上沾麵)', '午餐': 'そば処 田中屋 (出雲蕎麥)\n看雲楼 (大社附近老舗)\n甘右衛門 (出雲善哉)', '晚餐': '川京 (松江郷土料理)\n明島 (創作和食)\nやまいち (宍道湖七珍)' },
+        '2/4(水)': { '午餐': '八雲庵 (鴨南蠻蕎麥)\n皆美館 庭園茶寮 (鯛魚飯)\n西洋軒 (松江老舗洋食)', '晚餐': 'ねぎ焼 やまもと 本店 (十三蔥燒)\nくそオヤジ最後のひとふり (蜆拉麵)\nがんこ寿司 (關西壽司)' },
+        '2/5(木)': { '午餐': '味の札幌 大西 (味噌咖哩牛奶拉麵)\nくどうラーメン (清爽系)\n青森魚菜センター (Nokkedon)', '晚餐': 'おさない (帆立貝定食)\n一八寿し (近海壽司)\n津軽じょっぱり漁屋酒場' },
+        '2/6(金)': { '午餐': 'シェ・アンジュ (弘前法式)\nレストラン山崎 (奇蹟蘋果湯)\n三忠食堂 本店 (津輕蕎麥)', '晚餐': '津軽居酒屋 わいは\n杏 (郷土料理)\n菊富士 (Igamenchi)' },
+        '2/7(土)': { '午餐': 'りんごの家 (蘋果咖哩)\n大正浪漫喫茶室 (蘋果派)\nそば処 高砂', '晚餐': 'Pub Grandpa (蘋果西打酒)\n津軽三味線居酒屋 あいや\nかだれ横丁 (屋台村)' },
+        '2/8(日)': { '午餐': 'ポルトブラン (弘前法式)\nパティスリー山崎 (甜點午餐)\n弘前市役所 食堂', '晚餐': '焼肉 空 鶴橋本店 (排隊名店)\n鶴橋風月 本店 (大阪燒)\n入船寿司本店' },
+        '2/9(月)': { '午餐': '総本家 めはりや (高菜壽司)\n徐福寿司 (秋刀魚壽司)\n香梅堂 (鈴燒)', '晚餐': '焼肉ひげ (熊野牛)\n料理 菩提 (鯨魚/鮪魚料理)\n東宝茶屋 (居酒屋)' },
+        '2/10(火)': { '午餐': 'Bodai (炸鮪魚排)\n竹原 (鮪魚定食)\n桂城 (鮪魚料理)', '晚餐': '幸鮨 (白浜壽司)\nBarley (精釀啤酒與洋食)\n喜楽 (和歌山拉麵)' },
+        '2/11(水)': { '午餐': '京都五行 (焦香拉麵)\n名代とんかつ かつくら (炸豬排)\n本家 尾張屋 本店 (蕎麥麵)', '晚餐': 'すいば (立吞)\n先斗町 魯ビン (鴨川納涼床)\n餃子歩兵 祇園本店' },
+        '2/12(木)': { '午餐': '喫茶 ベニ屋 (炸豬排咖哩)\nすなば珈琲 (鳥取砂丘店)\n鯛喜 (豪華海鮮丼)', '晚餐': 'たくみ割烹店 (涮涮鍋始祖)\nかに吉 (螃蟹料理/需預約)\nスーパー居酒屋 鳥取' },
+        '2/13(金)': { '午餐': 'ブッシェリーはなふさ (鳥取和牛)\n香味徳 (牛骨拉麵)\n町屋清水庵 (年糕火鍋)', '晚餐': '魚鮮水産\n村上水産 (海鮮居酒屋)\nバード・ステイ・ホテル (烤雞串)' },
+        '2/14(土)': { '午餐': '機上', '晚餐': '駒形どぜう (泥鰍鍋)\n色川 (老舗鰻魚)\n蔵前 結わえる (寝かせ玄米)' },
+        '2/15(日)': { '午餐': '浅草今半 (壽喜燒)\n並木藪蕎麦 (江戶蕎麥)\nモンブラン (漢堡排)', '晚餐': '天麩羅 多から\nお好み焼き 染太郎\n神谷バー (電氣白蘭地)' },
+        '2/16(月)': { '午餐': '川豊 (成田鰻魚飯)\n寿司 京辰 (成田機場)\n一蘭 (最後的拉麵)', '晚餐': '機上餐' }
+    };
+    const CITY_COORDINATES = {
+        "台北": { lat: 25.0330, lon: 121.5654 }, "高雄": { lat: 22.6273, lon: 120.3014 }, "東京": { lat: 35.6762, lon: 139.6503 }, "出雲": { lat: 35.3667, lon: 132.7500 },
+        "松江": { lat: 35.4722, lon: 133.0505 }, "大阪": { lat: 34.6937, lon: 135.5023 }, "青森": { lat: 40.8244, lon: 140.7406 }, "弘前": { lat: 40.6031, lon: 140.4624 },
+        "白浜": { lat: 33.6806, lon: 135.3534 }, "京都": { lat: 35.0116, lon: 135.7681 }, "神戸": { lat: 34.6901, lon: 135.1955 }, "倉吉": { lat: 35.4333, lon: 133.8167 },
+        "鳥取": { lat: 35.5011, lon: 134.2351 }, "新宮": { lat: 33.7239, lon: 135.9925 }
+    };
+    const CUSTOM_LINKS = {
+      '弘前城雪燈籠まつり': 'https://www.hirosaki-kanko.or.jp/edit.html?id=cat02_winter_yuki',
+      'ぐるっと鳥取周遊タクシー': 'https://www.city.tottori.lg.jp/www/contents/1595918680657/index.html'
+    };
+
+    // --- LOGIC ---
+    let selectedDayIndex = 0;
+
+    // Helper: Map Links
+    function getGoogleMapsUrl(query) {
+        return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
+    }
+    function getMapLink(query) {
+        if (CUSTOM_LINKS[query]) return CUSTOM_LINKS[query];
+        return getGoogleMapsUrl(query);
+    }
+    function cleanLocationName(line) {
+        let cleaned = line.replace(/^•\s*/, '').replace(/^[早午晚]餐：/, '').trim();
+        cleaned = cleaned.replace(/[\[【].*?[\]】]/g, '').replace(/[\(（].*?[\)）]/g, '');
+        cleaned = cleaned.replace(/\d{1,2}:\d{2}(?:\s*[-〜~]\s*\d{1,2}:\d{2})?/g, '');
+        cleaned = cleaned.replace(/[\d,]+円/g, '').replace(/\s+/g, ' ').trim();
+        return cleaned;
+    }
+    function isLocationLine(line) {
+        const trimmed = line.trim();
+        if (trimmed.length < 2) return false;
+        const excludeKeywords = ['飯店', '早餐', '午餐', '晚餐', '車站', '泡湯', '花火', '喝酒', 'Note:', 'Action:', 'Info:', 'Lounge', 'Gate', '貴賓室'];
+        if (excludeKeywords.some(k => trimmed.includes(k))) return false;
+        if (trimmed === '未定') return false;
+        if (trimmed.includes('→') && /\d{1,2}:\d{2}/.test(trimmed)) return false;
+        if (trimmed.includes(' - ') && /\d{1,2}:\d{2}/.test(trimmed)) return false;
+        if (trimmed.includes('⇒')) return false;
+        const keywords = ['店', '駅', '空港', '神社', 'ホテル', '館', '公園', '温泉', '山', '寺', '居酒屋', '食堂', '珈琲', '寿司', '焼肉', '庵', '軒', '屋', '苑', '亭', '茶寮', '市場', '美術館', '処', '宿', 'イン', 'INN', '福乃和', 'Brewing', 'il filo', 'ローソン'];
+        if (line.startsWith('•') || keywords.some(k => line.includes(k))) return true;
+        if (/^[A-Z][a-zA-Z\s.,]+$/.test(trimmed) && trimmed.length > 3) return true;
+        return false;
+    }
+    
+    // HTML Generators
+    function formatTextWithLinks(text, forceLinks = false) {
+        if (!text) return '';
+        return text.split('\n').map(line => {
+            const trimmed = line.trim();
+            if (!trimmed) return '';
+            const timeMatch = trimmed.match(/^(\d{1,2}:\d{2}(?:\s*[-〜~]\s*\d{1,2}:\d{2})?)\s+(.*)$/);
+            let displayTime = null, displayLocation = trimmed;
+            if (timeMatch) { displayTime = timeMatch[1]; displayLocation = timeMatch[2]; }
+            
+            if (forceLinks || isLocationLine(displayLocation)) {
+                const query = cleanLocationName(displayLocation);
+                const url = getMapLink(query);
+                return `
+                <div class="flex items-start gap-2 group hover:bg-black/5 p-1 -mx-1 rounded transition-colors" onclick="event.stopPropagation()">
+                    <span class="mt-1 shrink-0 text-accent-red opacity-70 group-hover:opacity-100">${getIcon('MapPin', 'w-4 h-4')}</span>
+                    <div class="flex flex-col sm:flex-row sm:items-baseline gap-x-2 w-full">
+                         ${displayTime ? `<span class="text-xs font-sans text-sumi-light/70 whitespace-nowrap pt-0.5">${displayTime}</span>` : ''}
+                         <a href="${url}" target="_blank" rel="noopener noreferrer" class="text-sumi group-hover:text-black border-b border-transparent group-hover:border-accent-red/30 transition-all text-left font-medium">${displayLocation}</a>
+                    </div>
+                </div>`;
+            }
+            return `<div class="text-sumi leading-relaxed whitespace-pre-wrap pl-1 border-l-2 border-transparent">${trimmed}</div>`;
+        }).join('');
+    }
+
+    function getAirlineStyle(flightNum) {
+        if (flightNum.startsWith('BR')) return { bg: 'bg-emerald-50', text: 'text-emerald-700', border: 'border-emerald-200' };
+        if (flightNum.startsWith('JL')) return { bg: 'bg-red-50', text: 'text-red-700', border: 'border-red-200' };
+        if (flightNum.startsWith('NH')) return { bg: 'bg-sky-50', text: 'text-sky-700', border: 'border-sky-200' };
+        if (flightNum.startsWith('OZ')) return { bg: 'bg-amber-50', text: 'text-amber-800', border: 'border-amber-200' };
+        return { bg: 'bg-stone-100', text: 'text-stone-700', border: 'border-stone-200' };
+    }
+
+    function renderFlight(content) {
+        const match = content.match(/^([A-Z0-9]+)\s+([A-Z]{3})\s+(\d{1,2}:\d{2})\s*-\s*([A-Z]{3})\s+(\d{1,2}:\d{2})/);
+        if (!match) return `<div>${content}</div>`;
+        const [_, num, origin, t1, dest, t2] = match;
+        const originName = AIRPORT_NAMES[origin] || origin;
+        const destName = AIRPORT_NAMES[dest] || dest;
+        const style = getAirlineStyle(num);
+        return `
+        <div class="w-full">
+            <div class="flex justify-center mb-3"><span class="${style.bg} ${style.text} border ${style.border} text-[10px] font-serif tracking-widest px-2 py-0.5 rounded-sm font-bold uppercase">${num}</span></div>
+            <div class="flex items-center justify-between px-1">
+                <div class="flex flex-col items-start min-w-[30%]"><span class="text-2xl font-serif text-sumi font-medium leading-none mb-1">${t1}</span><span class="text-sm font-medium text-sumi mb-0.5">${originName}</span><span class="text-[10px] font-sans text-sumi-light/60 tracking-wider">${origin}</span></div>
+                <div class="flex-1 flex justify-center px-2 text-stone-300"><div class="relative w-full h-[1px] bg-stone-100"><div class="absolute right-0 -top-1">${getIcon('ArrowRight', 'text-stone-300')}</div></div></div>
+                <div class="flex flex-col items-end text-right min-w-[30%]"><span class="text-2xl font-serif text-sumi font-medium leading-none mb-1">${t2}</span><span class="text-sm font-medium text-sumi mb-0.5">${destName}</span><span class="text-[10px] font-sans text-sumi-light/60 tracking-wider">${dest}</span></div>
+            </div>
+        </div>`;
+    }
+
+    // Weather Logic
+    async function fetchWeather(cities) {
+        const container = document.getElementById('weather-container');
+        if (!cities.length) { container.innerHTML = ''; return; }
+        
+        // Render Loading
+        container.innerHTML = `<div class="flex gap-2">${cities.map(c => `
+            <div class="flex-1 bg-white/80 p-3 rounded-lg border border-stone-200 shadow-sm flex items-center justify-between">
+               <div class="flex flex-col"><span class="text-sm font-serif font-bold text-sumi">${c}</span><span class="text-[10px] text-sumi-light/70">Loading...</span></div>
+               ${getIcon('RefreshCw')}
+            </div>`).join('')}</div>`;
+
+        // Fetch
+        const results = await Promise.all(cities.map(async city => {
+            const coords = CITY_COORDINATES[city];
+            if(!coords) return { city, error: true };
+            try {
+                const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${coords.lat}&longitude=${coords.lon}&current=temperature_2m,weather_code&timezone=auto`);
+                const data = await res.json();
+                return { city, temp: Math.round(data.current.temperature_2m), code: data.current.weather_code };
+            } catch { return { city, error: true }; }
+        }));
+
+        // Render Result
+        container.innerHTML = `<div class="flex gap-2">${results.map(r => {
+            let icon = getIcon('Cloud');
+            if (r.code === 0) icon = getIcon('Sun');
+            else if (r.code >= 51 && r.code <= 67) icon = getIcon('CloudRain');
+            else if (r.code >= 71) icon = getIcon('CloudSnow');
+            else if (r.code >= 95) icon = getIcon('CloudLightning');
+            
+            return `
+            <div class="flex-1 bg-white/80 p-3 rounded-lg border border-stone-200 shadow-sm flex items-center justify-between">
+               <div class="flex flex-col"><span class="text-sm font-serif font-bold text-sumi">${r.city}</span><span class="text-[10px] text-sumi-light/70">Current</span></div>
+               <div class="flex items-center gap-2">${r.error ? '<span class="text-xs text-red-400">Error</span>' : `${icon}<span class="text-lg font-bold font-sans text-sumi-light">${r.temp}°</span>`}</div>
+            </div>`
+        }).join('')}</div>`;
+    }
+
+    async function checkCoupon(date) {
+        const el = document.getElementById('coupon-display');
+        if (!el || date !== '2026年2月13日') return;
+        try {
+            const res = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent('https://www.torican.jp/feature/tottorishi-syukuhakuCP-2')}&timestamp=${Date.now()}`);
+            const data = await res.json();
+            const match = data.contents.match(/クーポン残数\D*([\d,]+)/);
+            if (match && match[1]) {
+                el.innerHTML = `<span class="animate-fade-in text-accent-red flex items-center gap-2"><span>クーポン残数 ${match[1]}枚</span></span>`;
+            }
+        } catch(e) { console.log('Coupon fetch failed'); }
+    }
+
+    // MAIN RENDER FUNCTION
+    function renderDay(index) {
+        selectedDayIndex = index;
+        const day = TRIP_DATA[index];
+        const main = document.getElementById('main-content');
+        
+        // Parse Itinerary Items
+        const rawLines = [...(day.morning||"").split('\n'), ...(day.afternoon||"").split('\n'), ...(day.evening||"").split('\n')];
+        let items = [], current = null;
+        
+        const commit = () => { if(current) items.push(current); current = null; };
+        
+        rawLines.forEach(line => {
+            line = line.trim();
+            if(!line || line.match(/^-+$/) || line === '行程：') return;
+            
+            if (line.match(/^(早餐|午餐|晚餐)：/)) {
+                commit();
+                current = { type: 'meal', title: line.split('：')[0], content: line.split('：')[1] || '', details: [] };
+            } else if (line.match(/(?:BR|JL|NH|MM|IT|CI|GK|UO|OZ)\d+/) || (line.includes('-') && (line.includes('HND') || line.includes('NRT') || line.includes('ITM') || line.includes('AOJ')))) {
+                commit();
+                current = { type: 'flight', content: line, details: [] };
+            } else if (line.includes('→') && !line.startsWith('[') && !line.includes('参拝') && (line.match(/→/g)||[]).length === 1) {
+                commit();
+                current = { type: 'transport', content: line, details: [] };
+            } else if (line.startsWith('•')) {
+                commit();
+                current = { type: 'spot', content: line.replace(/^•\s*/, ''), details: [] };
+            } else if (current) {
+                current.details.push(line);
+            } else {
+                items.push({ type: 'note', content: line });
+            }
+        });
+        commit();
+
+        // Build HTML
+        let html = `<div class="animate-fade-in">`;
+        
+        // Weather Widget Placeholder
+        html += `<div id="weather-container" class="mb-4"></div>`;
+
+        // Top Note
+        if (day.notes) {
+            html += `
+            <div class="bg-[#FFFBEB] p-3 rounded-md border-l-4 border-accent-gold shadow-sm relative overflow-hidden mb-6">
+                <div class="absolute -right-2 -top-2 text-accent-gold/10 pointer-events-none">${getIcon('InfoLarge')}</div>
+                <div class="flex items-center gap-2 mb-1.5"><span class="bg-accent-gold text-white text-[10px] font-bold px-1.5 py-0.5 rounded-sm">旅のメモ</span></div>
+                <div class="text-xs text-stone-700 font-serif leading-relaxed relative z-10">${day.notes.split('\n').filter(l=>l.trim()).map(l=>`<div class="flex items-start gap-1.5 mb-1"><span class="mt-1 w-1 h-1 bg-stone-400 rounded-full shrink-0"></span><span>${l.replace(/^◆/,'').trim()}</span></div>`).join('')}</div>
+            </div>`;
+        }
+
+        // Timeline
+        html += `<div class="space-y-6 relative"><div class="absolute left-[15px] top-2 bottom-2 w-[1px] bg-stone-300/50 z-0"></div>`;
+
+        items.forEach(item => {
+            html += `<div class="relative z-10 pl-2">`;
+            if (item.type === 'meal') {
+                const suggestion = (item.content.includes('未定') || MEAL_SUGGESTIONS[day.dayLabel]?.[item.title]) ? MEAL_SUGGESTIONS[day.dayLabel]?.[item.title] : null;
+                html += `
+                <div class="flex gap-4 group items-start">
+                    <div class="mt-1 shrink-0 w-7 h-7 rounded-full bg-orange-50 border border-orange-200 flex items-center justify-center text-orange-600 z-10 shadow-white shadow-[0_0_0_1px]">${getIcon('Utensils')}</div>
+                    <div class="flex-1 bg-white p-4 rounded-sm border border-stone-100 shadow-sm">
+                        <div class="text-[10px] text-orange-600/80 font-serif tracking-widest uppercase mb-1 border-b border-orange-100/50 pb-1">${item.title}</div>
+                        <div class="text-sumi font-serif text-base leading-relaxed">
+                            ${item.title.includes('早餐') ? item.content : formatTextWithLinks(item.content)}
+                            ${suggestion ? `<div class="mt-3 pt-3 border-t border-dashed border-stone-200"><div class="text-[10px] text-sumi-light/60 mb-1 flex items-center gap-1">${getIcon('Sparkles', 'text-accent-gold')}<span>${item.content.includes('未定')?'建議地點':'其他推薦'}</span></div>${formatTextWithLinks(suggestion, true)}</div>` : ''}
+                        </div>
+                        ${item.details.length ? `<div class="mt-2 pt-2 border-t border-stone-100/50 text-sm text-sumi-light font-serif space-y-1">${item.details.map(d=>`<div>${d}</div>`).join('')}</div>` : ''}
+                    </div>
+                </div>`;
+            } else if (item.type === 'transport') {
+                const isBus = item.content.includes('Bus') || item.content.includes('バス') || item.details.some(d=>d.includes('バス'));
+                const [start, end] = item.content.split('→').map(s=>s.trim());
+                html += `
+                <div class="flex gap-4 group items-start">
+                    <div class="mt-1 shrink-0 w-7 h-7 rounded-full flex items-center justify-center z-10 shadow-white shadow-[0_0_0_1px] border ${isBus?'bg-indigo-50 border-indigo-200 text-indigo-600':'bg-emerald-50 border-emerald-200 text-emerald-600'}">${isBus?getIcon('Bus'):getIcon('Train')}</div>
+                    <div class="flex-1 bg-[#F9F8F6] p-3 rounded-sm border border-stone-200/60">
+                        <div class="text-sumi font-serif text-sm leading-relaxed mb-1">
+                            ${end ? `<div class="flex flex-col sm:flex-row sm:items-baseline gap-x-2"><a href="${getGoogleMapsUrl(cleanLocationName(start))}" target="_blank" class="font-medium hover:underline">${start}</a><span class="hidden sm:inline text-[10px] opacity-50">▶</span><a href="${getGoogleMapsUrl(cleanLocationName(end))}" target="_blank" class="font-medium hover:underline">${end}</a></div>` : `<a href="${getGoogleMapsUrl(cleanLocationName(item.content))}" target="_blank" class="font-medium hover:underline">${item.content}</a>`}
+                        </div>
+                        ${item.details.length ? `<div class="text-xs text-sumi-light/80 font-serif border-t border-stone-200/50 pt-1 mt-1 space-y-1">${item.details.map(d=>`<div>${d}</div>`).join('')}</div>` : ''}
+                    </div>
+                </div>`;
+            } else if (item.type === 'flight') {
+                html += `
+                <div class="flex gap-4 group items-start">
+                    <div class="mt-1 shrink-0 w-7 h-7 rounded-full bg-stone-100 border border-stone-200 text-stone-500 flex items-center justify-center z-10 shadow-white shadow-[0_0_0_1px]">${getIcon('Plane')}</div>
+                    <div class="flex-1 bg-white p-4 rounded-sm border-l-2 border-stone-200/60 shadow-sm">
+                        ${renderFlight(item.content)}
+                        ${item.details.length ? `<div class="mt-2 text-sm text-sumi-light font-serif">${item.details.map(d=>`<div>${d}</div>`).join('')}</div>` : ''}
+                    </div>
+                </div>`;
+            } else if (item.type === 'spot') {
+                const isLogistic = ['早餐','午餐','晚餐','飯店','行李','超市','採買'].some(k=>item.content.includes(k));
+                const timeMatch = item.content.match(/^(\d{1,2}:\d{2}(?:\s*[-〜~]\s*\d{1,2}:\d{2})?)\s+(.*)$/);
+                const displayTime = timeMatch ? timeMatch[1] : null;
+                const displayContent = timeMatch ? timeMatch[2] : item.content;
+                html += `
+                <div class="flex gap-4 group items-start">
+                    <div class="mt-1.5 shrink-0 w-7 h-7 flex items-center justify-center z-10"><div class="w-2 h-2 rounded-full ${isLogistic?'bg-stone-400':'bg-accent-red'} ring-4 ring-washi shadow-white shadow-[0_0_0_2px]"></div></div>
+                    <div class="flex-1 block">
+                        <div class="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-2">
+                             ${displayTime ? `<span class="text-xs font-sans text-sumi-light/70 whitespace-nowrap min-w-[3.5rem] pt-0.5">${displayTime}</span>` : ''}
+                             ${isLogistic ? `<span class="text-sumi font-serif text-sm font-medium leading-relaxed">${displayContent}</span>` : `<a href="${getMapLink(cleanLocationName(displayContent))}" target="_blank" class="text-sumi font-serif text-sm font-medium leading-relaxed hover:text-accent-red underline decoration-accent-red/30 underline-offset-4">${displayContent}</a>`}
+                        </div>
+                        ${item.details.length ? `<div class="mt-1 text-sm text-sumi-light font-serif pl-3 ml-1 py-1 border-l-2 border-stone-200 space-y-1">${formatTextWithLinks(item.details.join('\n'))}</div>` : ''}
+                    </div>
+                </div>`;
+            } else if (item.type === 'note') {
+                html += `<div class="flex gap-4 opacity-70 mb-2"><div class="shrink-0 w-7"></div><div class="text-xs text-sumi-light font-serif italic">${item.content}</div></div>`;
+            }
+            html += `</div>`;
+        });
+
+        // Accommodation
+        if (day.accommodation) {
+            const [name, ...details] = day.accommodation.split('\n');
+            html += `
+            <div class="pt-8 relative z-10 pl-2">
+                <div class="flex gap-4 items-start">
+                    <div class="mt-1 shrink-0 w-7 h-7 rounded-full bg-violet-50 border border-violet-200 flex items-center justify-center text-violet-600 z-10 shadow-white shadow-[0_0_0_1px]">${getIcon('Bed')}</div>
+                    <div class="flex-1 bg-[#F5F4F0] p-5 rounded-sm border border-stone-200">
+                        <h3 class="text-[10px] font-serif text-violet-600/70 uppercase tracking-widest mb-2 flex items-center gap-2"><span>Accommodation</span><span class="h-[1px] flex-1 bg-stone-300/50"></span></h3>
+                        <div class="text-base font-serif text-sumi leading-relaxed">
+                            ${formatTextWithLinks(name)}
+                            ${details.length ? `<div class="mt-2 pt-2 border-t border-stone-200/40 text-sm text-sumi-light/90 font-serif space-y-1">${details.map(l=>`<div class="flex items-start gap-2">${l.trim().startsWith('◆')?`<div class="mt-[6px] shrink-0 w-1.5 h-1.5 bg-accent-red/60 rotate-45 border border-accent-red/30"></div>`:''}<span class="${!l.trim().startsWith('◆')?'pl-3.5':''}">${l.replace('◆','').trim()}</span></div>`).join('')}</div>` : ''}
+                            ${day.date === '2026年2月13日' ? `<div class="mt-3 pt-3 border-t border-dashed border-red-200/50 flex justify-between items-center"><div class="flex items-center gap-2 text-accent-red">${getIcon('Ticket','w-3 h-3')}<span class="text-xs font-bold">鳥取市宿泊CP</span></div><div id="coupon-display" class="text-sm font-bold text-sumi"><span class="text-xs opacity-50">確認中...</span></div></div>` : ''}
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+        }
+
+        // Recommendations & Stories
+        if (day.recommendations || day.stories) {
+            html += `<div class="pt-6 pl-2 relative z-10"><h3 class="flex items-center gap-3 text-sm font-serif font-bold text-sumi-light mb-4 ml-10 whitespace-nowrap"><span class="w-8 h-[1px] bg-stone-300 shrink-0"></span><span>旅人攻略</span><span class="w-full h-[1px] bg-stone-300"></span></h3>`;
+            
+            // Recs
+            if (day.recommendations) {
+                html += `<div class="pl-12 mb-6 space-y-4">` + day.recommendations.map(r => `
+                    <div class="bg-white/60 p-3 rounded border border-stone-200 shadow-sm backdrop-blur-sm">
+                        <div class="flex items-center gap-2 mb-2 text-xs font-serif font-bold tracking-wider">
+                            <span class="${r.type==='food'?'bg-red-50 text-red-700 border-red-100':'bg-indigo-50 text-indigo-700 border-indigo-100'} px-2 py-0.5 rounded border flex items-center gap-1">${r.type==='food'?getIcon('Utensils','w-3 h-3'):getIcon('ShoppingBag','w-3 h-3')}${r.title}</span>
+                        </div>
+                        <div class="flex flex-wrap gap-2">${r.items.map(i=>`<div class="inline-flex items-baseline gap-1.5 text-sm"><span class="font-serif font-bold">${i.name}</span><span class="text-[10px] font-sans text-stone-500 bg-stone-100 px-1 rounded-sm">${i.jpName}</span></div>`).join('')}</div>
+                    </div>`).join('') + `</div>`;
+            }
+
+            // Stories
+            if (day.stories) {
+                html += `<div class="pl-12 space-y-4">` + day.stories.map(s => `
+                    <div class="bg-[#FDFCF8] border border-stone-300/60 p-4 rounded-sm relative overflow-hidden group hover:shadow-sm">
+                        <div class="absolute top-0 right-0 w-8 h-8 bg-stone-100 rounded-bl-3xl z-0"></div>
+                        <div class="relative z-10">
+                            <div class="mb-3">
+                                <h4 class="font-serif font-bold text-sumi flex items-center gap-2">${getIcon('BookOpen', 'text-accent-gold')}<span>${s.title}</span></h4>
+                                ${s.titleJp ? `<div class="text-xs text-accent-blue/80 font-bold font-sans ml-6 mt-1 tracking-wide">${s.titleJp}</div>`:''}
+                            </div>
+                            <div class="space-y-3">
+                                ${s.contentJp ? `<p class="text-sm text-sumi leading-7 text-justify font-serif border-l-2 border-accent-gold/30 pl-3">${s.contentJp}</p>` : ''}
+                                <div class="relative pt-2"><div class="w-4 h-[1px] bg-stone-300 mb-2"></div><p class="text-xs text-sumi-light leading-relaxed text-justify font-sans opacity-90">${s.content}</p></div>
+                            </div>
+                        </div>
+                    </div>`).join('') + `</div>`;
+            }
+            
+            // Dialects
+            if (day.dialects) {
+                 html += `<div class="pl-12 mt-8">
+                   <h3 class="flex items-center gap-2 text-xs font-serif font-bold text-sumi-light mb-3 bg-stone-200/50 inline-block px-3 py-1 rounded-full">${getIcon('MessageCircle', 'w-3 h-3 text-accent-blue')}旅の言葉</h3>
+                   <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      ${day.dialects.map(d => `
+                         <div class="bg-[#F6F5F2] p-3 rounded-lg border-2 border-stone-200/50 border-dashed relative">
+                            <div><div class="text-lg font-serif font-bold text-sumi mb-1">${d.phrase}</div><div class="text-[10px] font-sans text-accent-blue font-bold tracking-wider mb-2 uppercase">${d.pronunciation}</div><div class="text-xs font-medium text-sumi-light/80 bg-white px-2 py-1 rounded inline-block shadow-sm mb-3">${d.meaning}</div></div>
+                            ${d.example ? `<div class="mt-2 pt-2 border-t border-stone-200/50 text-xs"><div class="text-sumi font-medium mb-0.5"><span class="text-[9px] text-accent-red bg-red-50 px-1 rounded mr-1">例</span>${d.example}</div><div class="text-sumi-light/70 pl-5">${d.exampleMeaning}</div></div>` : ''}
+                         </div>`).join('')}
+                   </div></div>`;
+            }
+            
+            html += `</div>`;
+        }
+
+        html += `</div>`; // End Timeline Space-y-6
+        html += `<div class="mt-16 flex justify-center opacity-20 text-accent-blue">${getIcon('Snowflake', 'w-6 h-6')}</div>`;
+        html += `</div>`; // End Fade-in container
+        
+        main.innerHTML = html;
+
+        // Async Data
+        const cities = day.route.split(/[\s　]+/).filter(c => CITY_COORDINATES[c]);
+        fetchWeather(cities);
+        if (day.date === '2026年2月13日') checkCoupon(day.date);
+
+        // Update Nav Active State
+        document.querySelectorAll('#nav-container button').forEach((btn, idx) => {
+            if (idx === index) {
+                btn.className = "flex-shrink-0 snap-center flex flex-col items-center justify-center w-14 h-[4.5rem] rounded-xl transition-all duration-300 border overflow-hidden bg-stone-500 text-washi shadow-md scale-105 border-stone-500";
+            } else {
+                btn.className = "flex-shrink-0 snap-center flex flex-col items-center justify-center w-14 h-[4.5rem] rounded-xl transition-all duration-300 border overflow-hidden bg-white text-sumi border-stone-100 shadow-sm hover:border-stone-200";
+            }
+        });
+        
+        // Scroll nav to view
+        const activeBtn = document.querySelector(`button[data-idx="${index}"]`);
+        if(activeBtn) activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    }
+
+    // INIT
+    (function init() {
+        const nav = document.getElementById('nav-container');
+        
+        // Render Nav
+        TRIP_DATA.forEach((day, index) => {
+            const dateParts = day.dayLabel.split('(')[0].split('/');
+            const dayNum = dateParts[1];
+            const dayOfWeek = day.dayLabel.match(/\((.)\)/)?.[1];
+            
+            // Theme Logic
+            let theme = "神話の地";
+            if (index > 2) theme = "雪の北国";
+            if (index > 6) theme = "蘇りの道";
+            if (index > 9) theme = "風紋の記憶";
+            if (index > 12) theme = "帰路";
+            
+            const prevTheme = index > 0 ? (index-1 > 12 ? "帰路" : index-1 > 9 ? "風紋の記憶" : index-1 > 6 ? "蘇りの道" : index-1 > 2 ? "雪の北国" : "神話の地") : null;
+            
+            if (theme !== prevTheme) {
+                nav.innerHTML += `<div class="flex-shrink-0 flex items-center justify-center pl-1 pr-3 snap-start h-[4.5rem]"><div class="h-full flex items-center border-l-2 border-stone-300/30 pl-2"><span class="text-[10px] font-serif font-medium text-sumi-light/70 tracking-widest vertical-rl h-auto whitespace-nowrap">${theme}</span></div></div>`;
+            }
+
+            const btn = document.createElement('button');
+            btn.dataset.idx = index;
+            btn.onclick = () => renderDay(index);
+            btn.innerHTML = `
+                <span class="text-xl font-serif font-bold -mb-0.5 tracking-wider pointer-events-none">${dayNum}</span>
+                <span class="text-[9px] mb-1 font-serif pointer-events-none opacity-60">${dayOfWeek}</span>
+                <span class="text-[8px] tracking-tighter font-medium border-t pt-0.5 w-[90%] px-0.5 text-center leading-tight whitespace-normal line-clamp-2 border-stone-100 text-sumi-light pointer-events-none">${day.route}</span>
+            `;
+            nav.appendChild(btn);
+        });
+
+        // FAB Listener
+        document.getElementById('fab-map').onclick = () => {
+            const day = TRIP_DATA[selectedDayIndex];
+            const query = `${day.route} 日本`;
+            window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`, '_blank');
+        };
+
+        // Initial Render
+        renderDay(0);
+    })();
+    </script>
+</body>
+</html>
